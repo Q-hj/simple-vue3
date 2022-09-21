@@ -1,31 +1,49 @@
+<!--
+ * @Date: 2022-09-19 17:00:38
+ * @LastEditors: Mr.qin
+ * @LastEditTime: 2022-09-21 16:49:04
+ * @Description: 
+-->
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+	import myMap from './components/myMap.vue';
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+	<div class="container">
+		<section class="left">
+			<myMap></myMap>
+		</section>
+		<section class="right">
+			<header><p>杭州市</p></header>
+			<main>
+				<li v-for="item in 4" :key="item">
+					<article>
+						<b>展馆名称</b>
+						<span>杭州市西湖区宝石一路同人商务楼西南门西南侧约50米</span>
+					</article>
+					<button :class="item == 1 ? 'active' : ''">查看</button>
+				</li>
+			</main>
+		</section>
+	</div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+<style scoped lang="less">
+	.container {
+		width: 1200px;
+		height: 600px;
+		border-radius: 30px;
+		padding: 30px;
+		background-color: #fff;
+		display: grid;
+		// grid-template-rows: repeat(2, 1fr);
+		grid-template-columns: repeat(2, 1fr);
+		gap: 50px;
+		section {
+			&.left {
+				background-color: rgb(221, 55, 55);
+				border-radius: 10px;
+			}
+		}
+	}
 </style>
