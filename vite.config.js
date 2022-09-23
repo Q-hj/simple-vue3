@@ -1,11 +1,15 @@
 /*
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-19 18:21:56
+ * @LastEditTime: 2022-09-21 17:49:49
  * @Description:
  */
+
 import { defineConfig } from 'vite';
+
 import vue from '@vitejs/plugin-vue';
+
+import WindiCSS from 'vite-plugin-windicss';
 
 import Components from 'unplugin-vue-components/vite';
 
@@ -22,6 +26,7 @@ export default defineConfig({
 	},
 	plugins: [
 		vue(),
+		WindiCSS(),
 		//自动导入组件
 		Components(),
 	],
