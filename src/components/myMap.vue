@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-22 16:45:24
+ * @LastEditTime: 2022-09-27 14:34:00
  * @Description: 
 -->
 <script setup>
@@ -32,7 +32,7 @@
 			center: [120.1959, 30.261095], //设置地图中心点坐标
 			mapStyle: '', //显示样式
 			layers: [AMap.createDefaultLayer()], //设置图层,地貌贴图 new AMap.TileLayer.Satellite()
-			mapStyle: 'amap://styles/whitesmoke', //设置地图的显示样式
+			mapStyle: 'amap://styles/12a0c2fca7852d6bd9ac47ecf3f1f51d', //设置地图的显示样式
 			viewMode: '2D', //设置地图模式
 			// viewMode: '3D', //设置3d地图模式
 			// pitch: 20, //俯仰角度，2D地图下无效 。

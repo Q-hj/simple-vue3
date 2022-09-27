@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-07-22 16:50:58
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-19 18:27:55
+ * @LastEditTime: 2022-09-27 15:33:12
  * @Description: 设置基础网页基础样式
  */
 :root {
@@ -19,16 +19,16 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
-	font-size: calc(100vw / 750);
+	/* font-size: calc(100vw / 750); */
 }
 li {
 	list-style: none;
 }
 /* pc端 根节点字体大小 */
 @media screen and (min-width: 1000px) {
-	:root {
+	/* :root {
 		font-size: calc(100vw / 1920);
-	}
+	} */
 }
 
 /* 当浏览器为浅色模式 */

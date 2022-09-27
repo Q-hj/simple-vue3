@@ -1,12 +1,17 @@
 <!--
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-23 11:21:10
+ * @LastEditTime: 2022-09-27 16:11:04
  * @Description: 
 -->
 <script setup>
 	import myMap from './components/myMap.vue';
-	const venueList = [
+	import { ref, watch } from 'vue';
+	const mapEl = ref(null);
+
+	const current = ref({});
+
+	let venueList = [
 		{
 			name: '杭州纪念馆',
 			longitude: 120.1959,
@@ -14,18 +19,29 @@
 			location: '杭州市西湖区宝石一路同人商务楼西南门西南侧约50米',
 		},
 	];
+	venueList = venueList.concat(
+		venueList.concat(
+			venueList.concat(
+				venueList.concat(venueList.concat(venueList.concat(venueList)))
+			)
+		)
+	);
 	const getVenueList = () => {};
+
+	watch(current, () => {});
 </script>
 
 <template>
 	<div class="container">
 		<section class="left">
-			<myMap></myMap>
+			<myMap ref="mapEl" :makers="venueList" :active="current"></myMap>
 		</section>
 		<section class="right">
-			<header><p>杭州市</p></header>
-			<main>
-				<li v-for="(item, index) in venueList" :key="index">
+			<header lg="bg-current" class="h-[50px]">
+				<p class="text-lg font-bold text-yellow-600">杭州市</p>
+			</header>
+			<main class="border-2 border-yellow-500/50">
+				<li class="h-1/5" v-for="(item, index) in venueList" :key="index">
 					<article>
 						<b>{{ item.name }}</b>
 						<span>{{ item.location }}</span>
@@ -52,6 +68,15 @@
 			&.left {
 				background-color: rgb(221, 55, 55);
 				border-radius: 10px;
+			}
+			&.right {
+				main {
+					height: calc(100% - 50px);
+					overflow: scroll;
+					&::-webkit-scrollbar {
+						display: none;
+					}
+				}
 			}
 		}
 	}
