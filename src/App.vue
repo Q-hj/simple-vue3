@@ -1,11 +1,12 @@
 <!--
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-27 16:11:04
+ * @LastEditTime: 2022-09-28 17:58:07
  * @Description: 
 -->
 <script setup>
 	import myMap from './components/myMap.vue';
+	import locationSvg from './assets/svg/location.vue';
 	import { ref, watch } from 'vue';
 	const mapEl = ref(null);
 
@@ -42,10 +43,15 @@
 			</header>
 			<main class="border-2 border-yellow-500/50">
 				<li class="h-1/5" v-for="(item, index) in venueList" :key="index">
-					<article>
-						<b>{{ item.name }}</b>
-						<span>{{ item.location }}</span>
-					</article>
+					<aside>
+						<div class="rounded-1/2 border-red-500 p-[20px]">
+							<locationSvg class="fill-yellow-400"></locationSvg>
+						</div>
+						<article>
+							<b>{{ item.name }}</b>
+							<span>{{ item.location }}</span>
+						</article>
+					</aside>
 					<button :class="index == 1 ? 'active' : ''">查看</button>
 				</li>
 			</main>
