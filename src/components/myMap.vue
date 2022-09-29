@@ -1,17 +1,17 @@
 <!--
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-27 14:34:00
+ * @LastEditTime: 2022-09-29 15:18:45
  * @Description: 
 -->
 <script setup>
 	import AMapLoader from '@amap/amap-jsapi-loader';
 	import { ref } from 'vue';
 
-	defineProps({
-		msg: String,
+	const { makers = [] } = defineProps({
+		makers: Array,
 	});
-
+	const activeMaker = ref({});
 	let map;
 
 	AMapLoader.load({
@@ -26,7 +26,7 @@
 			console.log(e);
 		});
 
-	function initMap() {
+	async function initMap() {
 		map = new AMap.Map('map', {
 			zoom: 10, //设置地图显示的缩放级别
 			center: [120.1959, 30.261095], //设置地图中心点坐标
@@ -38,9 +38,41 @@
 			// pitch: 20, //俯仰角度，2D地图下无效 。
 			// terrain: true, //地图是否展示地形，此属性适用于 3D 地图。(JSAPI v2.1Beta 及以上版本)
 		});
+		addMakers(makers);
 	}
 
+	const addMakers = (list) => {
+		for (const { id, name, longitude, latitude } of list) {
+			const maker = new AMap.Marker({
+				position: new AMap.LngLat(longitude, latitude),
+				offset: new AMap.Pixel(-20, -40),
+				icon: '/src/assets/svg/maker.svg', // 添加 Icon 图标 URL
+				title: name,
+				// label: {
+				// 	content: name,
+				// },
+				extData: { id, name },
+			});
+			maker.on('click', handleMakerClick);
+			map.add(maker);
+		}
+	};
+	const infoWindow = new AMap.InfoWindow({
+		// content: activeMaker.value.name,
+		content: `<div><p>${activeMaker.name}</p></div>`,
+		anchor: 'bottom-center',
+	});
+	const handleMakerClick = ({ lnglat, pixel, type, target }) => {
+		activeMaker.value = target._opts.extData;
+		// 在地图上打开信息窗体
+		// infoWindow.open(map, [lnglat.lng, lnglat.lat]);
+	};
 	// map.destroy();// 销毁地图，并清空地图容器
+
+	// 导出组件方法
+	defineExpose({
+		addMakers,
+	});
 </script>
 
 <template>

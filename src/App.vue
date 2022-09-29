@@ -1,13 +1,13 @@
 <!--
  * @Date: 2022-09-19 17:00:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-29 11:46:05
+ * @LastEditTime: 2022-09-29 14:31:34
  * @Description: 
 -->
 <script setup>
 	import myMap from './components/myMap.vue';
 	import locationSvg from './assets/svg/location.vue';
-	import { ref, watch } from 'vue';
+	import { ref, watch, onMounted } from 'vue';
 	const mapEl = ref(null);
 
 	const current = ref({});
@@ -22,11 +22,12 @@
 	];
 	venueList = venueList.concat(
 		venueList.concat(
-			venueList.concat(
-				venueList.concat(venueList.concat(venueList.concat(venueList)))
-			)
+			venueList.concat(venueList.concat(venueList.concat(venueList.concat(venueList))))
 		)
 	);
+	onMounted(() => {
+		// mapEl.value.addMakers(venueList);
+	});
 	const getVenueList = () => {};
 
 	watch(current, () => {});
@@ -35,10 +36,14 @@
 <template>
 	<div class="container">
 		<section class="left">
-			<myMap ref="mapEl" :makers="venueList" :active="current"></myMap>
+			<myMap
+				ref="mapEl"
+				:makers="venueList"
+				:active="current"
+			></myMap>
 		</section>
 		<section class="right">
-			<header lg="bg-current" class="h-50px">
+			<header class="h-50px">
 				<p class="text-lg font-bold text-yellow-600">杭州市</p>
 			</header>
 			<main class="border-2 border-yellow-500/50">
@@ -48,9 +53,7 @@
 					:key="index"
 				>
 					<aside class="between-center">
-						<div
-							class="rounded-1/2 w-45px h-45px border border-orange-300 p-8px flex-center"
-						>
+						<div class="rounded-1/2 w-45px h-45px border border-orange-300 p-8px flex-center">
 							<locationSvg class="fill-yellow-400"></locationSvg>
 						</div>
 						<article class="col-between ml-10px h-full">
@@ -58,7 +61,12 @@
 							<span class="text-sm text-gray-600">{{ item.location }}</span>
 						</article>
 					</aside>
-					<button class="btn" :class="index == 1 ? 'active' : ''">查看</button>
+					<button
+						class="btn"
+						:class="index == 1 ? 'active' : ''"
+					>
+						<p class="w-90% border-transparent">查看</p>
+					</button>
 				</li>
 			</main>
 		</section>
@@ -67,7 +75,9 @@
 
 <style scoped>
 	.btn {
-		@apply btn font-bold px-7 py-3px transition duration-200  text-red-700 rounded-none  border border-red-700 hover:text-yellow-300 hover:bg-red-700;
+		@apply btn font-bold px-7 py-3px transition duration-200 
+		 text-red-700 rounded-none  border border-red-700  
+		  hover:text-yellow-300 hover:bg-red-700 hover:all:border-yellow-700;
 	}
 	@variants hover {
 	}
