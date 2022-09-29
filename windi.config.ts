@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-27 14:13:32
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-27 14:25:38
+ * @LastEditTime: 2022-09-29 09:47:52
  * @Description:
  */
 import { defineConfig } from 'windicss/helpers';
@@ -42,7 +42,10 @@ export default defineConfig({
 	},
 	// Windi CSS 提供了 Shortcuts 特性可以工具类的名字组合在一起定义成一个新的名字，在任何地方使用，就免去了大量重复冗余的代码。
 	shortcuts: {
-		'box view': 'w-[25%] h-12 rounded-md m-4px',
+		'flex-center': ' flex justify-center items-center',
+		'between-center': 'flex justify-between items-center',
+		'col-center': ' flex justify-between items-center flex-col',
+		'col-between': ' flex justify-between flex-col',
 	},
 	plugins: [
 		plugin(({ addUtilities }) => {
