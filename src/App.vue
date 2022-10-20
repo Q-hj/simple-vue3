@@ -5,32 +5,32 @@
  * @Description: 
 -->
 <script setup>
-	import myMap from './components/myMap.vue';
-	import locationSvg from './assets/svg/location.vue';
-	import { ref, watch, onMounted } from 'vue';
-	const mapEl = ref(null);
+import myMap from './components/myMap.vue';
+import locationSvg from './assets/svg/location.vue';
+import { ref, watch, onMounted } from 'vue';
+const mapEl = ref(null);
 
-	const current = ref({});
+const current = ref({});
 
-	let venueList = [
-		{
-			name: '杭州纪念馆',
-			longitude: 120.1959,
-			latitude: 30.261095,
-			location: '杭州市西湖区宝石一路同人商务楼西南门西南侧约50米',
-		},
-	];
-	venueList = venueList.concat(
-		venueList.concat(
-			venueList.concat(venueList.concat(venueList.concat(venueList.concat(venueList))))
-		)
-	);
-	onMounted(() => {
-		// mapEl.value.addMakers(venueList);
-	});
-	const getVenueList = () => {};
+let venueList = [
+	{
+		name: '杭州纪念馆',
+		longitude: 120.1959,
+		latitude: 30.261095,
+		location: '杭州市西湖区宝石一路同人商务楼西南门西南侧约50米',
+	},
+];
+venueList = venueList.concat(
+	venueList.concat(
+		venueList.concat(venueList.concat(venueList.concat(venueList.concat(venueList))))
+	)
+);
+onMounted(() => {
+	// mapEl.value.addMakers(venueList);
+});
+const getVenueList = () => { };
 
-	watch(current, () => {});
+watch(current, () => { });
 </script>
 
 <template>
@@ -74,49 +74,53 @@
 </template>
 
 <style scoped>
-	.btn {
-		@apply btn font-bold px-7 py-3px transition duration-200 
-		 text-red-700 rounded-none  border border-red-700  
-		  hover:text-yellow-300 hover:bg-red-700 hover:all:border-yellow-700;
-	}
-	@variants hover {
-	}
+.btn {
+	@apply btn font-bold px-7 py-3px transition duration-200 text-red-700 rounded-none border border-red-700 hover: text-yellow-300 hover:bg-red-700 hover:all:border-yellow-700;
+}
+
+@variants hover {}
 </style>
 <style scoped lang="less">
-	@li-py: 12px;
-	.container {
-		width: 1800px;
-		height: 600px;
-		border-radius: 30px;
-		padding: 30px;
-		background-color: #fff;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		// grid-template-rows: repeat(2, 1fr);
-		gap: 50px;
-		section {
-			&.left {
-				background-color: rgb(221, 55, 55);
-				border-radius: 10px;
-			}
-			&.right {
-				main {
-					height: calc(100% - 50px);
-					overflow: scroll;
-					&::-webkit-scrollbar {
-						display: none;
-					}
-					li {
-						padding-top: @li-py;
-						padding-bottom: @li-py;
-						aside {
-							height: calc(100% - (@li-py * 2));
-							article {
-							}
-						}
+@li-py: 12px;
+
+.container {
+	width: 1800px;
+	height: 600px;
+	border-radius: 30px;
+	padding: 30px;
+	background-color: #fff;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	// grid-template-rows: repeat(2, 1fr);
+	gap: 50px;
+
+	section {
+		&.left {
+			background-color: rgb(221, 55, 55);
+			border-radius: 10px;
+		}
+
+		&.right {
+			main {
+				height: calc(100% - 50px);
+				overflow: scroll;
+
+				&::-webkit-scrollbar {
+					display: none;
+				}
+
+				li {
+					padding-top: @li-py;
+					padding-bottom: @li-py;
+
+					aside {
+						height: calc(100% - (@li-py * 2));
+
+						article {}
 					}
 				}
 			}
 		}
 	}
+}
 </style>
