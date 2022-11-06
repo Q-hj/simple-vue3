@@ -1,9 +1,3 @@
-<!--
- * @Date: 2022-09-19 17:00:38
- * @LastEditors: Mr.qin
- * @LastEditTime: 2022-10-25 11:17:56
- * @Description: 
--->
 <script setup>
 	import myMap from './components/myMap.vue';
 	import locationSvg from './assets/svg/location.vue';
