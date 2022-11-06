@@ -1,89 +1,78 @@
 <!--
- * @Date: 2022-09-19 17:00:38
+ * @Date: 2022-10-25 10:27:38
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-10-20 11:42:15
+ * @LastEditTime: 2022-11-06 22:49:36
  * @Description: 
 -->
 <script setup>
-import AMapLoader from '@amap/amap-jsapi-loader';
-import { ref } from 'vue';
+	import { ref, watch, onMounted } from 'vue';
+	import { get, post } from '../apis/http';
+	let map;
 
-const { makers = [] } = defineProps({
-	makers: Array,
-});
-const activeMaker = ref({});
-let map;
-
-AMapLoader.load({
-	key: '8d1a96b8010d4f16e6a73e964155c116', // 申请好的Web端开发者Key，首次调用 load 时必填
-	version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-	plugins: [], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
-})
-	.then((AMap) => {
-		initMap(AMap);
-	})
-	.catch((e) => {
-		console.log(e);
+	onMounted(async () => {
+		initMap();
 	});
 
-async function initMap(AMap) {
-	map = new AMap.Map('map', {
-		zoom: 10, //设置地图显示的缩放级别
-		center: [120.1959, 30.261095], //设置地图中心点坐标
-		mapStyle: '', //显示样式
-		layers: [AMap.createDefaultLayer()], //设置图层,地貌贴图 new AMap.TileLayer.Satellite()
-		mapStyle: 'amap://styles/12a0c2fca7852d6bd9ac47ecf3f1f51d', //设置地图的显示样式
-		viewMode: '2D', //设置地图模式
-		// viewMode: '3D', //设置3d地图模式
-		// pitch: 20, //俯仰角度，2D地图下无效 。
-		// terrain: true, //地图是否展示地形，此属性适用于 3D 地图。(JSAPI v2.1Beta 及以上版本)
-	});
-	addMakers(makers);
-}
+	const makerWindow = new T.InfoWindow();
 
-const addMakers = (list) => {
-	for (const { id, name, longitude, latitude } of list) {
-		const maker = new AMap.Marker({
-			position: new AMap.LngLat(longitude, latitude),
-			offset: new AMap.Pixel(-20, -40),
-			icon: '/src/assets/svg/maker.svg', // 添加 Icon 图标 URL
-			title: name,
-			// label: {
-			// 	content: name,
-			// },
-			extData: { id, name },
+	const setMakerWindow = ({ name }, target) => {
+		makerWindow.setContent(
+			"<div> <div class='p-t-5  makerWindow'>" +
+				`<p class='fz-16 c-white tac'>${name}</p>` +
+				`<p class='fz-16 c-white tac'>热点数量：${0}</p>` +
+				'' +
+				'</div></div>'
+		);
+		target.openInfoWindow(makerWindow);
+	};
+
+	//
+	const imageURL =
+		'http://t0.tianditu.gov.cn/img_w/wmts?' +
+		'SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles' +
+		'&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=cbf747f3c05f4a8ce26160b19ffe581a';
+
+	// 实例化地图
+	const initMap = () => {
+		if (!T) return setTimeout(() => initMap(), 200);
+		map = new T.Map('map-canvas');
+		map.centerAndZoom(new T.LngLat(120.170667, 30.274543), 8); // 设置中心点和比例
+		// map.addLayer(new T.TileLayer(imageURL, { minZoom: 1, maxZoom: 18 }));
+	};
+	//向地图上添加标注
+	const addMaker = (list) => {
+		// console.log(list);
+
+		list.forEach(({ longitude, latitude, legendUrl, ...other }) => {
+			const maker = new T.Marker(new T.LngLat(+longitude, +latitude), getMarkerOptions(legendUrl));
+			maker.on('mouseover', ({ lnglat, target, originalEvent }) => {
+				setMakerWindow(other, target);
+			});
+			map.addOverLay(maker);
 		});
-		maker.on('click', handleMakerClick);
-		map.add(maker);
-	}
-};
-// const infoWindow = new AMap.InfoWindow({
-// 	// content: activeMaker.value.name,
-// 	content: `<div><p>${activeMaker.name}</p></div>`,
-// 	anchor: 'bottom-center',
-// });
+	};
 
-const handleMakerClick = ({ lnglat, pixel, type, target }) => {
-	activeMaker.value = target._opts.extData;
-	// 在地图上打开信息窗体
-	// infoWindow.open(map, [lnglat.lng, lnglat.lat]);
-};
-// map.destroy();// 销毁地图，并清空地图容器
+	const defultIcon = new URL(`/src/assets/icon/location.png`, import.meta.url).href;
 
-// 导出组件方法
-defineExpose({
-	addMakers,
-});
+	const getMarkerOptions = (iconUrl = defultIcon) =>
+		iconUrl
+			? {
+					icon: new T.Icon({ iconUrl, iconSize: new T.Point(40, 40) }),
+			  }
+			: null;
+	defineExpose({
+		addMaker,
+	});
 </script>
 
 <template>
-	<div id="map"></div>
+	<div style="width: 100%; height: 100%">
+		<div
+			class="map-canvas"
+			id="map-canvas"
+			style="width: 100%; height: 100%"
+		></div>
+	</div>
 </template>
 
-<style scoped lang="less">
-#map {
-	width: 100%;
-	height: 100%;
-	border-radius: 10px;
-}
-</style>
+<style lang="less" scoped></style>

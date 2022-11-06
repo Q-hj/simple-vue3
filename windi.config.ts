@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-09-27 14:13:32
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-09-29 09:47:52
+ * @LastEditTime: 2022-11-06 22:13:53
  * @Description:
  */
 import { defineConfig } from 'windicss/helpers';
@@ -18,7 +18,7 @@ export default defineConfig({
 			screens: {
 				sm: '640px',
 				md: '768px',
-				lg: '1024px',
+				lg: '1200px',
 				xl: '1280px',
 				'2xl': '1536px',
 			},
