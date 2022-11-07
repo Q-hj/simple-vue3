@@ -19,7 +19,7 @@ const setMakerWindow = ({ name, repositoryNum }, target) => {
   makerWindow.setContent(
     "<div> <div class='p-t-5  makerWindow'>" +
       `<p class='fz-16 c-white tac'>${name}</p>` +
-      `<p class='fz-16 c-white tac'>资源数量：${repositoryNum}</p>` +
+      `<p class='fz-16 c-white tac'>资源数量：${repositoryNum || 0}</p>` +
       "" +
       "</div></div>"
   );
@@ -35,7 +35,7 @@ const imageURL =
 // 实例化地图
 const initMap = () => {
   if (!T) return setTimeout(() => initMap(), 200);
-  map = new T.Map("map-canvas");
+  map = new T.Map("map-canvas", { minZoom: 5, maxZoom: 18 });
   map.centerAndZoom(new T.LngLat(120.170667, 30.274543), 8); // 设置中心点和比例
   // map.addLayer(new T.TileLayer(imageURL, { minZoom: 1, maxZoom: 18 }));
 };

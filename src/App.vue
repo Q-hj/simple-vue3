@@ -13,14 +13,16 @@ const mapEl = ref(null);
 
 let venueList = ref([]);
 onMounted(async () => {
-  const list = await get("/pavilion/select");
+  const list = await get("/mini/select");
 
   venueList.value = list.sort((a, b) => b.id - a.id);
 
   mapEl.value.addMaker(venueList.value);
 });
 
-const handleClick = ({ path }) => window.open(path);
+const handleClick = ({ path }) => {
+  if (path) window.open(path);
+};
 </script>
 
 <template>
@@ -54,7 +56,6 @@ const handleClick = ({ path }) => window.open(path);
           </aside>
           <button
             @click="handleClick(item)"
-            v-show="item.path"
             class="btn"
             :class="index == 1 ? 'active' : ''"
           >
