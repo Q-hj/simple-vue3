@@ -1,45 +1,39 @@
+<!--
+ * @Date: 2022-09-19 17:00:38
+ * @LastEditors: Mr.qin
+ * @LastEditTime: 2022-10-25 11:17:56
+ * @Description: 
+-->
 <script setup>
 	import myMap from './components/myMap.vue';
 	import locationSvg from './assets/svg/location.vue';
 	import { ref, watch, onMounted } from 'vue';
+	import { get, post } from './apis/http';
 	const mapEl = ref(null);
 
-	const current = ref({});
+	let venueList = ref([]);
+	onMounted(async () => {
+		const list = await get('/mini/select');
 
-	let venueList = [
-		{
-			name: '杭州纪念馆',
-			longitude: 120.1959,
-			latitude: 30.261095,
-			location: '杭州市西湖区宝石一路同人商务楼西南门西南侧约50米',
-		},
-	];
-	venueList = venueList.concat(
-		venueList.concat(
-			venueList.concat(venueList.concat(venueList.concat(venueList.concat(venueList))))
-		)
-	);
-	onMounted(() => {
-		// mapEl.value.addMakers(venueList);
+		venueList.value = list.sort((a, b) => b.id - a.id);
+
+		mapEl.value.addMaker(venueList.value);
 	});
-	const getVenueList = () => {};
 
-	watch(current, () => {});
+	const handleClick = ({ path }) => {
+		if (path) window.open(path);
+	};
 </script>
 
 <template>
 	<div class="container">
 		<section class="left">
-			<myMap
-				ref="mapEl"
-				:makers="venueList"
-				:active="current"
-			></myMap>
+			<myMap ref="mapEl"></myMap>
 		</section>
 
 		<section class="right">
 			<header class="h-50px">
-				<p class="text-lg font-bold text-yellow-600">杭州市</p>
+				<p class="text-lg font-bold text-yellow-600">浙江省</p>
 			</header>
 			<main class="border-2 border-yellow-500/50">
 				<li
@@ -57,6 +51,7 @@
 						</article>
 					</aside>
 					<button
+						@click="handleClick(item)"
 						class="btn"
 						:class="index == 1 ? 'active' : ''"
 					>
