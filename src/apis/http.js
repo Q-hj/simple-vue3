@@ -1,11 +1,11 @@
 /*
  * @Date: 2022-08-10 14:19:08
  * @LastEditors: Mr.qin
- * @LastEditTime: 2022-11-06 22:21:51
+ * @LastEditTime: 2022-12-09 11:18:26
  * @Description: 请求的封装
  */
 
-import axios from "axios";
+import axios from 'axios';
 // import { ElMessage } from 'element-plus';
 // import { proxyConfig } from '../../config.ts';
 //
@@ -14,134 +14,131 @@ import axios from "axios";
 
 const { DEV } = import.meta.env;
 // "http://124.222.90.238:8082"
-const baseURL = DEV
-  ? "http://10.1.96.38:8082"
-  : "http://10.249.173.113:38082/lc";
+const baseURL = DEV ? 'https://zjzlxs.zjds.org.cn/lc' : 'https://zjzlxs.zjds.org.cn/lc';
 
 console.log(baseURL);
 // create an axios instance
 const request = axios.create({
-  baseURL, // 设置请求根路径
-  timeout: 1000 * 60 * 2, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
+	baseURL, // 设置请求根路径
+	timeout: 1000 * 60 * 2, // 请求超时时间,后端有接口响应慢 则可以设置更长(单位:毫秒)
 });
 
 // 将参数转成Body 表单格式
 const transformBody = (data, headers) => {
-  let ret = "";
-  for (let it in data) {
-    ret += encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
-  }
-  return ret.slice(0, -1);
+	let ret = '';
+	for (let it in data) {
+		ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+	}
+	return ret.slice(0, -1);
 };
 
 // request interceptor
 // 发送请求前的统一处理。。。
 request.interceptors.request.use(
-  (request) => {
-    // 设置全局加载状态  列表加载 ， 提交，
-    // store.commit("showLoading");
+	(request) => {
+		// 设置全局加载状态  列表加载 ， 提交，
+		// store.commit("showLoading");
 
-    // do something before request is sent
-    // 设置请求头
-    request.headers.get["Content-Type"] = "application/json"; //默认json格式
+		// do something before request is sent
+		// 设置请求头
+		request.headers.get['Content-Type'] = 'application/json'; //默认json格式
 
-    if (request.method == "post") {
-      // console.log(request);
-    }
+		if (request.method == 'post') {
+			// console.log(request);
+		}
 
-    // 请求头中添加token
-    const token = sessionStorage.getItem("token");
+		// 请求头中添加token
+		const token = sessionStorage.getItem('token');
 
-    token && (request.headers["token"] = token);
+		token && (request.headers['token'] = token);
 
-    // if (request.url.includes('delete'))
-    // 	request.transformRequest = [transformBody];
+		// if (request.url.includes('delete'))
+		// 	request.transformRequest = [transformBody];
 
-    return request;
-  },
-  (error) => {
-    // store.commit("hideLoading");
+		return request;
+	},
+	(error) => {
+		// store.commit("hideLoading");
 
-    // do something with request error
-    // 假如发送请求失败
-    console.log(error); // for debug
-    // return Promise.reject(error)
-    return Promise.reject(new Error("网络异常"));
-  }
+		// do something with request error
+		// 假如发送请求失败
+		console.log(error); // for debug
+		// return Promise.reject(error)
+		return Promise.reject(new Error('网络异常'));
+	}
 );
 
 // response interceptor
 // 请求后的处理
 request.interceptors.response.use(
-  (response) => {
-    // store.commit("hideLoading");
-    const res = response.data;
+	(response) => {
+		// store.commit("hideLoading");
+		const res = response.data;
 
-    // 剖析：response（http响应）  -->  res（http响应体）  -->  data | result（后端接口结果）
+		// 剖析：response（http响应）  -->  res（http响应体）  -->  data | result（后端接口结果）
 
-    // response.status  http状态码
-    // 也可以根据后端返回的code进行响应状态判断
-    // response.data.code 等同于 res.code
+		// response.status  http状态码
+		// 也可以根据后端返回的code进行响应状态判断
+		// response.data.code 等同于 res.code
 
-    // 请求成功
-    if (response.status === 200) {
-      // res.code == 200
-      if (res.code < 201 || res.status < 201)
-        return Promise.resolve(res.data || res.result || res);
-      // else ElMessage.error(res.msg || '请求错误！');
-    }
-    // 权限不足
-    if (response.status === 401 || res.code == 401) {
-      if (sessionStorage.getItem("token")) {
-        sessionStorage.clear("token");
-        // Toast.fail("登录状态已过期,请重新登录");
-      } else {
-        // Toast.fail("请先登录!");
-      }
-      // router.push("/home");
-      // window.location.reload();
+		// 请求成功
+		if (response.status === 200) {
+			// res.code == 200
+			if (res.code < 201 || res.status < 201) return Promise.resolve(res.data || res.result || res);
+			// else ElMessage.error(res.msg || '请求错误！');
+		}
+		// 权限不足
+		if (response.status === 401 || res.code == 401) {
+			if (sessionStorage.getItem('token')) {
+				sessionStorage.clear('token');
+				// Toast.fail("登录状态已过期,请重新登录");
+			} else {
+				// Toast.fail("请先登录!");
+			}
+			// router.push("/home");
+			// window.location.reload();
 
-      return Promise.resolve(res);
-    }
-    // 服务端错误
-    if (response.status === 500) return Promise.reject(res.result);
+			return Promise.resolve(res);
+		}
+		// 服务端错误
+		if (response.status === 500) return Promise.reject(res.result);
 
-    return res;
-  },
-  (error) => {
-    // store.commit("hideLoading");
+		return res;
+	},
+	(error) => {
+		// store.commit("hideLoading");
 
-    const response = error.response?.message || "请求超时";
-    const method = error.config.method;
-    console.error(`\t[${method}]${response}\n` + "\t[url]:" + error.config.url);
-    // console.error(
-    // 	`${response}` +
-    // 		'\n\t请求方式:' +
-    // 		`${method}` +
-    // 		'\n\t请求url:' +
-    // 		error.config.url
-    // );
+		const response = error.response?.message || '请求超时';
+		const method = error.config.method;
+		console.error(`\t[${method}]${response}\n` + '\t[url]:' + error.config.url);
+		// console.error(
+		// 	`${response}` +
+		// 		'\n\t请求方式:' +
+		// 		`${method}` +
+		// 		'\n\t请求url:' +
+		// 		error.config.url
+		// );
 
-    // switch  ?
-    let httpCode = {
-      400: "请求参数错误",
-      401: "权限不足, 请重新登录",
-      403: "服务器拒绝本次访问",
-      404: "请求资源未找到",
-      405: "请求方法错误",
-      500: "内部服务器错误",
-      501: "服务器不支持该请求中使用的方法",
-      502: "网关错误",
-      504: "网关超时",
-    };
+		// switch  ?
+		let httpCode = {
+			400: '请求参数错误',
+			401: '权限不足, 请重新登录',
+			403: '服务器拒绝本次访问',
+			404: '请求资源未找到',
+			405: '请求方法错误',
+			500: '内部服务器错误',
+			501: '服务器不支持该请求中使用的方法',
+			502: '网关错误',
+			504: '网关超时',
+		};
 
-    // ElMessage.error(httpCode[response.status] || '请求超时！');
+		// ElMessage.error(httpCode[response.status] || '请求超时！');
 
-    return Promise.reject(response); //catch捕获
-  }
+		return Promise.reject(response); //catch捕获
+	}
 );
 
-let baseApi = "";
+let baseApi = '';
 export const setBaseApi = (api) => (baseApi = api);
 
 // 是否为代理url
@@ -161,43 +158,42 @@ export const setBaseApi = (api) => (baseApi = api);
  * @param {boolean} loading 是否请求中
  */
 const handleRequest = (url, method, params, word, loading = {}) => {
-  // params = { ...params, createtime: undefined, modifytime: undefined };
-  if (loading.value != undefined) loading.value = true;
+	// params = { ...params, createtime: undefined, modifytime: undefined };
+	if (loading.value != undefined) loading.value = true;
 
-  // 可以在每个页面中设置请求根路径，以/结尾
-  if (url[0] != "/") url = baseApi + url;
+	// 可以在每个页面中设置请求根路径，以/结尾
+	if (url[0] != '/') url = baseApi + url;
 
-  // 非调用代理接口，则加上根路径
-  // if (!isProxyUrl(url) && !url.includes('http')) url = baseURL + url;
+	// 非调用代理接口，则加上根路径
+	// if (!isProxyUrl(url) && !url.includes('http')) url = baseURL + url;
 
-  return new Promise((resolve, reject) => {
-    request({
-      url,
-      method,
-      params: method == "get" ? params : undefined,
-      data: method == "post" ? params : undefined,
-    })
-      .then((result) => {
-        resolve(result);
+	return new Promise((resolve, reject) => {
+		request({
+			url,
+			method,
+			params: method == 'get' ? params : undefined,
+			data: method == 'post' ? params : undefined,
+		})
+			.then((result) => {
+				resolve(result);
 
-        // if (word)
-        // 	ElMessage({
-        // 		message: word + '成功',
-        // 		type: 'success',
-        // 	});
-      })
-      .catch((result) => {
-        // reject(result);
-        // if (word) ElMessage.error(word + '失败');
-      })
-      .finally(() => {
-        if (loading.value) loading.value = false;
-      });
-  });
+				// if (word)
+				// 	ElMessage({
+				// 		message: word + '成功',
+				// 		type: 'success',
+				// 	});
+			})
+			.catch((result) => {
+				// reject(result);
+				// if (word) ElMessage.error(word + '失败');
+			})
+			.finally(() => {
+				if (loading.value) loading.value = false;
+			});
+	});
 };
 
-export const get = (url, params, word, loading) =>
-  handleRequest(url, "get", params, word, loading);
+export const get = (url, params, word, loading) => handleRequest(url, 'get', params, word, loading);
 
 export const post = (url, params, word, loading) =>
-  handleRequest(url, "post", params, word, loading);
+	handleRequest(url, 'post', params, word, loading);
